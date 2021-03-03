@@ -1,5 +1,6 @@
 package th.ac.ku.atm.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,22 +14,19 @@ import th.ac.ku.atm.service.BankAccountService;
 @RequestMapping("/bankaccount")
 public class BankAccountController {
 
-    private BankAccountService bankAccountService;
-
-    public BankAccountController(BankAccountService bankAccountService) {
-        this.bankAccountService = bankAccountService;
-    }
+    @Autowired
+    BankAccountService bankAccountService;
 
     @GetMapping
     public String getBankAccountPage(Model model){
-//        model.addAttribute("allBankaccount",bankAccountService.getListBankAccount());
+        model.addAttribute("allBankaccount",bankAccountService.getBankAccounts());
         return "bankaccount";
     }
 
     @PostMapping
     public String openBankAccount(@ModelAttribute BankAccount bankAccount, Model model){
-//        bankAccountService.createBankAccount(bankAccount);
-//        model.addAttribute("allBankaccount",bankAccountService.getListBankAccount());
+        bankAccountService.openAccount(bankAccount);
+        model.addAttribute("allBankaccount",bankAccountService.getBankAccounts());
         return "redirect:bankaccount";
     }
 }
